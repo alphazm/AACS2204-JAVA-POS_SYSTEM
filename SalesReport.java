@@ -1,31 +1,74 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
+package testass;
 
 /**
  *
  * @author laiyo
  */
-// library
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.*;
+import java.io.*;
 
-public class SalesReport {
+public class SalesReport{ 
     
     // data field
     int totalQuantity;
     double totalRevenue;
+    private int id;
+    private List<SalesReport> items;
+    private long second;
+    private int qty;
+    private String product;
+    private double price;
+    
+    //constructor
+        public SalesReport(int id, long second, List<SalesReport> items) {
+            this.id = id;
+            this.second = second;
+            this.items = items;
+        }
+        
+        public SalesReport(String product, int qty, double price) {
+            this.product = product;
+            this.qty = qty;
+            this.price = price;
+        }
+        
+        public SalesReport(){
+            
+        }
+        
+        // getter
+        public int getId(){
+            return id;
+        }
+        
+        public long getSecond(){
+            return second;
+        }
+        
+        public List<SalesReport> getItems(){
+            return items;
+        }
+
+        public String getProduct(){
+            return product;
+        }
+        
+        public int getQty(){
+            return qty;
+        }
+        
+        public double getPrice(){
+            return price;
+        }
  
     // methods    
     // read from text file
-    public static ArrayList<Receipt> readFile(String filePath){
-            ArrayList<Receipt> receiptList = new ArrayList<>();
+    public static ArrayList<SalesReport> readFile(String filePath){
+            ArrayList<SalesReport> receiptList = new ArrayList<>();
 
           try{
             
@@ -45,16 +88,16 @@ public class SalesReport {
                  long second = Long.parseLong(values[1]);
                  
                  // create a list of products
-                 List<Product> items = new ArrayList<>();
+                 List<SalesReport> items = new ArrayList<>();
                  for (int i = 2; i < values.length; i += 3) {
                      String name = values[i];
                      int qty = Integer.parseInt(values[i+1]);
                      double price = Double.parseDouble(values[i+2]);
-                     items.add(new Product(name,qty,price));
+                     items.add(new SalesReport(name,qty,price));
                  }
                  
                  // create a Receipt object and add to ArrayList
-                 Receipt receipt = new Receipt(receiptID, second, items);
+                 SalesReport receipt = new SalesReport(receiptID, second, items);
                  receiptList.add(receipt);
                  
                 }
@@ -68,11 +111,11 @@ public class SalesReport {
         }
     
     // mapping and calculate for productSales
-    public static Map<String, SalesReport> calculateProductSales(List<Receipt> receiptList) {
+    public static Map<String, SalesReport> calculateProductSales(List<SalesReport> receiptList) {
         Map<String, SalesReport> productSalesMap = new HashMap<>();
 
-        for (Receipt receipt : receiptList) {
-            for (Product product : receipt.getItems()) {
+        for (SalesReport receipt : receiptList) {
+            for (SalesReport product : receipt.getItems()) {
                 String productName = product.getProduct();
                 int quantity = product.getQty();
                 double price = product.getPrice();
@@ -91,7 +134,7 @@ public class SalesReport {
     }
     
     // generate Product Sales
-    public static void generateProductSalesReport(ArrayList<Receipt> receiptList) {
+    public static void generateProductSalesReport(ArrayList<SalesReport> receiptList) {
         Map<String, SalesReport> productSalesMap = calculateProductSales(receiptList);
 
         // Print the product sales report
@@ -108,11 +151,11 @@ public class SalesReport {
     }
     
     // calculate Total Sales
-    public static double calculateTotalSales(ArrayList<Receipt> receiptList) {
+    public static double calculateTotalSales(ArrayList<SalesReport> receiptList) {
         double totalSalesRevenue = 0;
 
-        for (Receipt receipt : receiptList) {
-            for (Product product : receipt.getItems()) {
+        for (SalesReport receipt : receiptList) {
+            for (SalesReport product : receipt.getItems()) {
                 totalSalesRevenue += product.getPrice() * product.getQty();
             }
         }
@@ -121,7 +164,7 @@ public class SalesReport {
     }
     
     // generate Total Sales
-    public static void generateTotalSalesReport(ArrayList<Receipt> receiptList) {
+    public static void generateTotalSalesReport(ArrayList<SalesReport> receiptList) {
         double totalSalesRevenue = calculateTotalSales(receiptList);
 
         // Print the total sales report
@@ -130,71 +173,13 @@ public class SalesReport {
         System.out.printf("Total Sales Revenue: $%.2f%n", totalSalesRevenue);
         System.out.println();
     }
-   
-    // nested static class
-    public static class Receipt {
-        
-        // data field
-        private int id;
-        private List<Product> items;
-        private long second;
-        
-        // constructor
-        public Receipt(int id, long second, List<Product> items) {
-            this.id = id;
-            this.second = second;
-            this.items = items;
-        }
-        
-        // getter
-        public int getId(){
-            return id;
-        }
-        
-        public long getSecond(){
-            return second;
-        }
-        
-        public List<Product> getItems(){
-            return items;
-        }
-    }
     
-    // nested static class
-    public static class Product {
-        
-        // data field
-        private int qty;
-        private String product;
-        private double price;
-        
-        // constructor
-        public Product(String product, int qty, double price) {
-            this.product = product;
-            this.qty = qty;
-            this.price = price;
-        }
-        
-        // getter
-        public String getProduct(){
-            return product;
-        }
-        
-        public int getQty(){
-            return qty;
-        }
-        
-        public double getPrice(){
-            return price;
-        }
-    }
-    
-     public static void main(String[] args) {
-        String filePath = "src/receipt.txt";
-        ArrayList<Receipt> receiptList = readFile(filePath);
+    public static void main(String[] args) {
+        String filePath = "src/testass/receipt.txt";
+        ArrayList<SalesReport> receiptList = readFile(filePath);
 
         generateTotalSalesReport(receiptList);
         generateProductSalesReport(receiptList);
     }
+    
 }
-
