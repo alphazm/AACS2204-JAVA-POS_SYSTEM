@@ -4,12 +4,14 @@ public class Receipt {
 
 
     private int receiptID;
+    private int productID;
     private long second;
     private double price;
     private int quantity;
 
-    public Receipt(int receiptID, long second,int quantity,double price) {
+    public Receipt(int receiptID,long second,int productID,int quantity,double price) {
         this.receiptID = receiptID;
+        this.productID = productID;
         this.second = second;
         this.price = price;
         this.quantity = quantity;
